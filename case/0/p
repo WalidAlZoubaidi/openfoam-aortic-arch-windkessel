@@ -1,0 +1,158 @@
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    object      p;
+}
+
+dimensions      [kinematicPressure];
+internalField   uniform 11.697119;
+boundaryField
+{
+    inlet { type zeroGradient; }
+    wall { type zeroGradient; }
+    outlet_descending
+    {
+        type            codedFixedValue;
+        value           uniform 11.697119;
+        name            windkessel_outlet_descending;
+
+        code
+        #{
+            // RCR parameters, SI units (70.0 % of cardiac output)
+            const scalar Rp  = 1.214591e+07;     // [Pa.s/m^3]
+            const scalar Rd  = 1.902859e+08;     // [Pa.s/m^3]
+            const scalar C   = 7.350625e-09;     // [m^3/Pa]
+            const scalar rho = 1060.0;
+
+            static scalar Pc    = 1.165501e+04;
+            static scalar PcOld = 1.165501e+04;
+            static label  lastTimeIndex = -1;
+
+            const label timeIndex = this->db().time().timeIndex();
+            if (timeIndex != lastTimeIndex)
+            {
+                PcOld = Pc;
+                lastTimeIndex = timeIndex;
+            }
+
+            const scalar Q = gSum
+            (
+                this->patch().lookupPatchField<surfaceScalarField, scalar>("phi")
+            );
+
+            const scalar dt = this->db().time().deltaTValue();
+            Pc = (PcOld + dt/C*Q)/(1 + dt/(Rd*C));
+
+            operator==((Rp*Q + Pc)/rho);
+        #};
+    }
+    outlet_brachiocephalic
+    {
+        type            codedFixedValue;
+        value           uniform 11.697119;
+        name            windkessel_outlet_brachiocephalic;
+
+        code
+        #{
+            // RCR parameters, SI units (15.0 % of cardiac output)
+            const scalar Rp  = 5.668090e+07;     // [Pa.s/m^3]
+            const scalar Rd  = 8.880007e+08;     // [Pa.s/m^3]
+            const scalar C   = 1.575134e-09;     // [m^3/Pa]
+            const scalar rho = 1060.0;
+
+            static scalar Pc    = 1.165501e+04;
+            static scalar PcOld = 1.165501e+04;
+            static label  lastTimeIndex = -1;
+
+            const label timeIndex = this->db().time().timeIndex();
+            if (timeIndex != lastTimeIndex)
+            {
+                PcOld = Pc;
+                lastTimeIndex = timeIndex;
+            }
+
+            const scalar Q = gSum
+            (
+                this->patch().lookupPatchField<surfaceScalarField, scalar>("phi")
+            );
+
+            const scalar dt = this->db().time().deltaTValue();
+            Pc = (PcOld + dt/C*Q)/(1 + dt/(Rd*C));
+
+            operator==((Rp*Q + Pc)/rho);
+        #};
+    }
+    outlet_carotid
+    {
+        type            codedFixedValue;
+        value           uniform 11.697119;
+        name            windkessel_outlet_carotid;
+
+        code
+        #{
+            // RCR parameters, SI units (7.5 % of cardiac output)
+            const scalar Rp  = 1.133618e+08;     // [Pa.s/m^3]
+            const scalar Rd  = 1.776001e+09;     // [Pa.s/m^3]
+            const scalar C   = 7.875669e-10;     // [m^3/Pa]
+            const scalar rho = 1060.0;
+
+            static scalar Pc    = 1.165501e+04;
+            static scalar PcOld = 1.165501e+04;
+            static label  lastTimeIndex = -1;
+
+            const label timeIndex = this->db().time().timeIndex();
+            if (timeIndex != lastTimeIndex)
+            {
+                PcOld = Pc;
+                lastTimeIndex = timeIndex;
+            }
+
+            const scalar Q = gSum
+            (
+                this->patch().lookupPatchField<surfaceScalarField, scalar>("phi")
+            );
+
+            const scalar dt = this->db().time().deltaTValue();
+            Pc = (PcOld + dt/C*Q)/(1 + dt/(Rd*C));
+
+            operator==((Rp*Q + Pc)/rho);
+        #};
+    }
+    outlet_subclavian
+    {
+        type            codedFixedValue;
+        value           uniform 11.697119;
+        name            windkessel_outlet_subclavian;
+
+        code
+        #{
+            // RCR parameters, SI units (7.5 % of cardiac output)
+            const scalar Rp  = 1.133618e+08;     // [Pa.s/m^3]
+            const scalar Rd  = 1.776001e+09;     // [Pa.s/m^3]
+            const scalar C   = 7.875669e-10;     // [m^3/Pa]
+            const scalar rho = 1060.0;
+
+            static scalar Pc    = 1.165501e+04;
+            static scalar PcOld = 1.165501e+04;
+            static label  lastTimeIndex = -1;
+
+            const label timeIndex = this->db().time().timeIndex();
+            if (timeIndex != lastTimeIndex)
+            {
+                PcOld = Pc;
+                lastTimeIndex = timeIndex;
+            }
+
+            const scalar Q = gSum
+            (
+                this->patch().lookupPatchField<surfaceScalarField, scalar>("phi")
+            );
+
+            const scalar dt = this->db().time().deltaTValue();
+            Pc = (PcOld + dt/C*Q)/(1 + dt/(Rd*C));
+
+            operator==((Rp*Q + Pc)/rho);
+        #};
+    }
+}

@@ -1,0 +1,37 @@
+FoamFile
+{
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+
+dimensions      [velocity];
+internalField   uniform (0 0 0);
+boundaryField
+{
+    inlet
+    {
+        type            flowRateInletVelocity;
+        volumetricFlowRate coded;
+        name            cardiacInflow;
+        codeInclude
+        #{
+            #include "mathematicalConstants.H"
+        #};
+        code
+        #{
+            // half-sine systolic ejection, 70 mL per beat, 75 bpm
+            const scalar tc = x - 0.8*floor(x/0.8);
+            return tc < 0.3
+              ? 3.665191e-04*sin(constant::mathematical::pi*tc/0.3)
+              : 0.0;
+        #};
+        profile         laminarBL;
+        value           uniform (0 0 0);
+    }
+    wall { type noSlip; }
+    outlet_descending { type inletOutlet; inletValue uniform (0 0 0); value uniform (0 0 0); }
+    outlet_brachiocephalic { type inletOutlet; inletValue uniform (0 0 0); value uniform (0 0 0); }
+    outlet_carotid { type inletOutlet; inletValue uniform (0 0 0); value uniform (0 0 0); }
+    outlet_subclavian { type inletOutlet; inletValue uniform (0 0 0); value uniform (0 0 0); }
+}

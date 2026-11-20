@@ -1,0 +1,17 @@
+#!/bin/sh
+# Build the geometry, write the case, mesh it and run two heartbeats.
+# Requires OpenFOAM 14 (openfoam.org) sourced in the shell, and Python 3 with numpy and vtk.
+cd "${0%/*}" || exit 1
+
+python3 scripts/make_geometry.py case/constant/geometry/aorta.stl || exit 1
+python3 scripts/make_case.py || exit 1
+
+cd case || exit 1
+. "$WM_PROJECT_DIR/bin/tools/RunFunctions"
+touch case.foam
+runApplication blockMesh
+runApplication surfaceFeatures
+runApplication snappyHexMesh -overwrite
+runApplication checkMesh
+runApplication decomposePar
+runParallel foamRun

@@ -1,0 +1,12 @@
+# Generated geometry (rebuilt by scripts/make_geometry.py)
+case/constant/geometry/*.stl
+case/constant/geometry/*.eMesh
+# Mesh, results and logs
+case/constant/polyMesh/
+case/processor*/
+case/[0-9]*.[0-9]*/
+case/postProcessing/
+case/dynamicCode/
+case/log.*
+case/case.foam
+__pycache__/

@@ -1,0 +1,38 @@
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+
+solver          incompressibleFluid;
+startFrom       latestTime;
+startTime       0;
+stopAt          endTime;
+endTime         1.6;
+deltaT          2e-4;
+writeControl    adjustableRunTime;
+writeInterval   0.025;
+purgeWrite      0;
+writeFormat     binary;
+writePrecision  8;
+writeCompression off;
+timeFormat      general;
+timePrecision   6;
+runTimeModifiable yes;
+adjustTimeStep  yes;
+maxCo           0.9;
+maxDeltaT       1e-3;
+
+functions
+{
+    #includeFunc patchFlowRate(patch=inlet)
+    #includeFunc patchFlowRate(patch=outlet_descending)
+    #includeFunc patchAverage(patch=outlet_descending, fields=(p))
+    #includeFunc patchFlowRate(patch=outlet_brachiocephalic)
+    #includeFunc patchAverage(patch=outlet_brachiocephalic, fields=(p))
+    #includeFunc patchFlowRate(patch=outlet_carotid)
+    #includeFunc patchAverage(patch=outlet_carotid, fields=(p))
+    #includeFunc patchFlowRate(patch=outlet_subclavian)
+    #includeFunc patchAverage(patch=outlet_subclavian, fields=(p))
+}

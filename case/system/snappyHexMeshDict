@@ -1,0 +1,51 @@
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+#includeEtc "caseDicts/mesh/generation/snappyHexMeshDict.cfg"
+castellatedMesh on;
+snap            on;
+addLayers       off;
+geometry
+{
+    wall { type triSurface; file "wall.stl"; }
+    inlet { type triSurface; file "inlet.stl"; }
+    outlet_descending { type triSurface; file "outlet_descending.stl"; }
+    outlet_brachiocephalic { type triSurface; file "outlet_brachiocephalic.stl"; }
+    outlet_carotid { type triSurface; file "outlet_carotid.stl"; }
+    outlet_subclavian { type triSurface; file "outlet_subclavian.stl"; }
+};
+castellatedMeshControls
+{
+    maxGlobalCells 5000000;
+    nCellsBetweenLevels 3;
+    features ( { file "aorta.eMesh"; level 1; } );
+    refinementSurfaces
+    {
+        wall { level (1 1); patchInfo { type wall; } }
+        inlet { level (1 1); patchInfo { type patch; } }
+        outlet_descending { level (1 1); patchInfo { type patch; } }
+        outlet_brachiocephalic { level (1 1); patchInfo { type patch; } }
+        outlet_carotid { level (1 1); patchInfo { type patch; } }
+        outlet_subclavian { level (1 1); patchInfo { type patch; } }
+    }
+    refinementRegions {}
+    insidePoint (-0.030 0.0 -0.030);
+}
+snapControls
+{
+    nSmoothPatch 5;
+    tolerance 2.0;
+    nSolveIter 100;
+    nRelaxIter 8;
+    nFeatureSnapIter 15;
+    explicitFeatureSnap true;
+    implicitFeatureSnap false;
+}
+addLayersControls { layers {} relativeSizes true; expansionRatio 1.2; finalLayerThickness 0.5; minThickness 0.1; }
+meshQualityControls { }
+writeFlags ();
+mergeTolerance 1e-6;

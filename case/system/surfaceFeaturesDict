@@ -1,0 +1,9 @@
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      surfaceFeaturesDict;
+}
+
+surfaces ("aorta.stl");
+#includeEtc "caseDicts/surface/surfaceFeaturesDict.cfg"

@@ -1,0 +1,5 @@
+#!/bin/sh
+cd "${0%/*}/case" || exit 1
+. "$WM_PROJECT_DIR/bin/tools/CleanFunctions"
+cleanCase
+rm -f constant/geometry/*.stl constant/geometry/*.eMesh case.foam
